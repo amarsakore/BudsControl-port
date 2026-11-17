@@ -1,0 +1,27 @@
+[package]
+name = "buds-bt"
+version.workspace = true
+description = "Per-OS Bluetooth RFCOMM backends for buds-core"
+authors.workspace = true
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+buds-core = { version = "1.0.0", path = "../buds-core" }
+tokio = { version = "1.54.1", features = ["rt", "time", "sync"] }
+
+[target."cfg(windows)".dependencies]
+windows = { version = "0.62.2", features = ["Win32_Foundation", "Win32_Networking_WinSock", "Win32_Devices_Bluetooth", "Win32_System_Time", "Win32_System_IO", "Win32_System_Com", "Win32_System_Com_StructuredStorage", "Win32_System_Variant", "Win32_Media_Audio", "Win32_Media_KernelStreaming"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+bluer = { version = "0.17", features = ["bluetoothd", "rfcomm"] }
+futures = "0.3"
+tokio = { version = "1.54.1", features = ["rt", "time", "sync", "macros", "io-util"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6.5"
+objc2-foundation = { version = "0.3", default-features = false, features = ["std", "NSObject", "NSArray", "NSString", "NSDate", "NSRunLoop", "NSData", "NSPort", "NSObjCRuntime"] }
+objc2-io-bluetooth = { version = "0.3.2", default-features = false, features = ["std", "objc2", "IOBluetoothObject", "IOBluetoothDevice", "IOBluetoothRFCOMMChannel", "IOBluetoothSDPServiceRecord", "IOBluetoothSDPUUID", "IOBluetoothUserLib", "Bluetooth", "IOBluetoothTypes", "objc2-foundation"] }
+dispatch2 = "0.3.1"
+block2 = "0.6"

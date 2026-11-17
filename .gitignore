@@ -1,0 +1,40 @@
+# Rust
+/target/
+**/target/
+
+# Node / Vite
+node_modules/
+dist/
+dist-ssr/
+*.local
+npm-debug.log*
+
+# Tauri
+/src-tauri/gen/schemas/
+/src-tauri/binaries/
+
+# Upstream macOS app, cloned for reference
+/reference/
+
+# Logs
+*.log
+
+# Editors / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.sw?
+
+# Claude Code local settings
+/.claude/
+
+# Planning and progress notes kept locally, not in the repository
+/docs/PLAN.md
+/docs/PROGRESS.md
+
+# Packaging output
+/release/
+/src-tauri/gen/
