@@ -63,9 +63,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-latest
+          - os: macos-15
             arch: arm64
-          - os: macos-13
+          - os: macos-15-intel
             arch: x64
     steps:
       - uses: actions/checkout@v4
