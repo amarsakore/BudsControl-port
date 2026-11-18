@@ -1,22 +1,69 @@
-# Buds Control
+<p align="center">
+  <img src="src-tauri/icons/128x128.png" alt="" width="96" height="96">
+</p>
 
-**Control OnePlus, OPPO and realme earbuds from your PC's tray, without the phone app.**
+<h1 align="center">Buds Control</h1>
+
+<p align="center">
+  <b>Control OnePlus, OPPO and realme earbuds from the tray, without the phone app.</b><br>
+  Windows · Linux · macOS
+</p>
+
+<p align="center">
+  <a href="../../releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/pacceka-buddha/BudsControl?label=release"></a>
+  <a href="../../actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/pacceka-buddha/BudsControl/ci.yml?branch=main&label=CI"></a>
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-blue"></a>
+  <img alt="Platforms" src="https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey">
+</p>
+
+<p align="center">
+  <a href="#download-and-install">Download</a> ·
+  <a href="#using-it">Using it</a> ·
+  <a href="#command-line-budsctl">Command line</a> ·
+  <a href="#troubleshooting">Troubleshooting</a> ·
+  <a href="CHANGELOG.md">Changelog</a>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/flyout-windows-anc.jpg" alt="The flyout on Windows 11 with noise cancellation on" height="430">
+  <img src="docs/screenshots/flyout-windows-eq.jpg" alt="The flyout on Windows 11 with the custom equalizer open" height="430">
+  <img src="docs/screenshots/linux-flyout-expanded.jpg" alt="The flyout on Ubuntu 24.04 with GNOME" height="430">
+</p>
 
 Switch between noise cancellation, transparency and off in one click, pick the ANC level, check the battery and change
 the equalizer. Buds Control is a cross-platform port of
-[amarsakore/BudsControl](https://github.com/amarsakore/BudsControl) (a macOS app), built with Rust, Tauri 2 and Svelte.
+[amarsakore/BudsControl](https://github.com/amarsakore/BudsControl), a macOS app, built with Rust, Tauri 2 and Svelte.
+It is small, works offline and sends nothing to the internet.
 
-<p align="center">
-  <img src="docs/screenshots/real-expanded-anc-dark.jpg" alt="The Buds Control flyout open above the Windows taskbar" width="720">
-</p>
+## Features
 
-| Platform | Status |
-|---|---|
-| **Windows 10 / 11** (x64) | Tested on real hardware (OnePlus Buds 4) |
-| **Linux** (x64) | Tested on Ubuntu 24.04 with GNOME (X11 and Wayland) and OnePlus Buds 4, including the `.deb` and AppImage. Other distributions and desktops are **untested**. See the [Linux notes](docs/LINUX.md) for the Wayland limits; reports welcome |
-| **macOS 11+** (Apple silicon, Intel) | Tested on one Mac (macOS 27, Apple silicon, OnePlus Buds 3), including the `.dmg` install. Intel Macs are **untested**; reports welcome. The [original app](https://github.com/amarsakore/BudsControl) is the long-tested choice on a Mac |
+- **Noise control**: ANC, Transparency and Off in one click, plus the five ANC levels (Smart, Max, Moderate, Mild,
+  Adaptive) on models that have them.
+- **Battery** for the left bud, right bud and case, also drawn as a ring on the **tray icon** (with a charging bolt)
+  that follows the light or dark taskbar.
+- **Equalizer** presets and custom EQ, **low latency** mode, **find my earbuds** and **touch gestures**.
+- **Global shortcuts** (cycle, ANC, Transparency, Off) with a small on-screen popup.
+- **Automatic reconnect** when the buds joined only your phone, optional **remembered settings**, **launch at
+  login**.
+- **`budsctl`**, a command-line tool that controls the buds directly or through the running app.
+- **Developer tools**: packet log, raw commands and service discovery.
 
-## At a glance
+105 models of the OnePlus Buds, OPPO Enco and realme Buds families are known; the controls shown follow what the model
+supports.
+
+## Platform support
+
+| Platform | Status | Tested with |
+|---|---|---|
+| **Windows 10 / 11** (x64) | Tested | OnePlus Buds 4 |
+| **Linux** (x64) | Tested on Ubuntu 24.04; other distributions and desktops are **untested** | OnePlus Buds 4, GNOME on X11 and Wayland, `.deb` and AppImage |
+| **macOS 11+** (Apple silicon, Intel) | Tested on one Apple silicon Mac; Intel Macs are **untested** | OnePlus Buds 3, macOS 27, `.dmg` install |
+
+Hardware reports from untested setups are welcome; see [Contributing](#contributing). Wayland limits are in
+[docs/LINUX.md](docs/LINUX.md). On a Mac, the [original app](https://github.com/amarsakore/BudsControl) is the
+long-tested choice.
+
+## Footprint
 
 | | Windows | Linux | macOS |
 |---|---|---|---|
@@ -27,46 +74,6 @@ the equalizer. Buds Control is a cross-platform port of
 
 Most of the memory is the system web view that draws the window; the Rust program itself is 32-64 MB. How these were
 measured, and more numbers: [docs/PERFORMANCE.md](docs/PERFORMANCE.md).
-
-## Contents
-
-- [Features](#features)
-- [Download and install](#download-and-install)
-- [Using it](#using-it)
-- [Command line (`budsctl`)](#command-line-budsctl)
-- [Troubleshooting](#troubleshooting)
-- [How it works](#how-it-works)
-- [Building from source](#building-from-source)
-- [Contributing](#contributing)
-- [Credits](#credits) · [Disclaimer](#disclaimer) · [License](#license)
-
-## Features
-
-- One-click **noise control** (ANC, Transparency, Off) and the five **ANC levels** (Smart, Max, Moderate, Mild,
-  Adaptive) where the model has them.
-- **Battery** for the left bud, right bud and case, also shown as a ring on the **tray icon** (with a charging bolt),
-  following the light/dark taskbar.
-- **Equalizer** presets and custom EQ, **low latency** mode, **find my earbuds** and **touch gestures**.
-- **Global shortcuts** (cycle, ANC, Transparency, Off) with a small on-screen popup.
-- **Automatic reconnect** when the buds joined only your phone, optional **remembered settings**, **launch at
-  login**.
-- **`budsctl`**, a command-line tool that controls the buds directly or through the running app.
-- Developer tools: packet log, raw commands, service discovery.
-
-105 models of the OnePlus Buds, OPPO Enco and realme Buds families are known; the controls shown follow what the
-model supports. Nothing is sent to the internet.
-
-<p align="center">
-  <img src="docs/screenshots/real-custom-eq-sliders.jpg" alt="Custom equalizer sliders" width="360">
-  <img src="docs/screenshots/real-settings-general.jpg" alt="Settings window" width="360">
-</p>
-
-The same app on Ubuntu 24.04 with GNOME:
-
-<p align="center">
-  <img src="docs/screenshots/linux-flyout-expanded.jpg" alt="The flyout on Ubuntu 24.04 (GNOME), above the panel" width="240">
-  <img src="docs/screenshots/linux-settings-general.jpg" alt="The Settings window on Ubuntu 24.04 (GNOME)" width="360">
-</p>
 
 ## Download and install
 
@@ -87,7 +94,7 @@ system's Bluetooth settings **before** starting Buds Control.
 - Windows hides new tray icons behind the **^** arrow next to the clock. To keep Buds Control visible, drag its icon
   onto the taskbar, or turn it on under *Settings > Personalization > Taskbar > Other system tray icons*.
 
-### Linux (tested on Ubuntu 24.04; see [docs/LINUX.md](docs/LINUX.md))
+### Linux
 
 | File | What it is |
 |---|---|
@@ -98,8 +105,9 @@ system's Bluetooth settings **before** starting Buds Control.
   AppIndicator extension).
 - Buds Control talks to BlueZ over D-Bus, so your user must be allowed to use Bluetooth (on some distributions that
   means being in the `bluetooth` group).
+- More in [docs/LINUX.md](docs/LINUX.md).
 
-### macOS (tested once on hardware, see the table above)
+### macOS
 
 - Download `BudsControl-<version>-macos-arm64.dmg` (Apple silicon) or `BudsControl-<version>-macos-x64.dmg` (Intel)
   and drag the app to *Applications*.
@@ -117,12 +125,13 @@ system's Bluetooth settings **before** starting Buds Control.
 | Menu (modes, Settings, Reconnect, Quit) | right-click the tray icon | click the tray icon | right-click or Control-click |
 | Shortcut popup | on-screen popup | desktop notification | on-screen popup |
 
-Starting the app a second time just opens the flyout. Shortcuts are set under **Settings > Shortcuts**.
+Starting the app a second time just opens the flyout. Shortcuts are set under **Settings > Shortcuts**. The earbuds only
+accept a noise-mode change while they are in your ears.
 
-On Linux, global shortcuts work on X11 only. On Wayland, bind keys to `budsctl cycle` (or `anc`, `transparency`,
-`off`) in your desktop's keyboard settings instead. Also on Wayland, the app runs through Xwayland so it can place the
-flyout, which opens at the right end of the panel instead of under the tray icon. The earbuds only accept a noise-mode
-change while they are in your ears. Details and other known issues: [docs/LINUX.md](docs/LINUX.md).
+**Linux and Wayland.** Global shortcuts work on X11 only. On Wayland, bind keys to `budsctl cycle` (or `anc`,
+`transparency`, `off`) in your desktop's keyboard settings instead. The app also runs through Xwayland there so it can
+place the flyout, which opens at the right end of the panel instead of under the tray icon. Details and other known
+issues: [docs/LINUX.md](docs/LINUX.md).
 
 ## Command line (`budsctl`)
 
@@ -150,7 +159,8 @@ the commands on simulated buds.
 - **A mode change is ignored**: the earbuds only accept a noise-mode change while they are in your ears. Some models
   also lack certain modes or levels; the flyout shows only what the model reports.
 - **Shortcut shows "Used by another app"**: another program has registered that key combination; pick another.
-- **Collecting details for a bug report**: run `budsctl status` and `budsctl devices`, and attach the log file:
+
+**Collecting details for a bug report.** Run `budsctl status` and `budsctl devices`, and attach the log file:
 
 | OS | Log file |
 |---|---|
@@ -199,37 +209,13 @@ Release packages go to `release/`:
 | macOS | `./scripts/package-macos.sh` | .dmg for the Mac's architecture |
 
 Pushing a `v*` tag builds all of them on GitHub Actions and attaches them to a release; see
-[docs/RELEASING.md](docs/RELEASING.md).
-
-### Project layout
-
-| Path | What it is |
-|---|---|
-| `crates/buds-core` | Protocol, parsers, device catalog, controller, settings, IPC (no OS code) |
-| `crates/buds-bt` | Bluetooth backends for Windows, Linux and macOS |
-| `crates/budsctl` | Command-line tool |
-| `crates/buds-art` | Tray icon drawing |
-| `crates/icongen` | App icon generator |
-| `src-tauri` | The Tauri app: tray, windows, shortcuts, popup |
-| `src` | Svelte frontend (flyout, settings, popup) |
-| `docs` | Protocol notes, hardware test log, Linux notes, performance figures and the release guide |
-
-### Without the buds
-
-- `BUDS_FAKE=1 npm run tauri dev` runs the app against simulated buds (`BUDS_FAKE_SWEEP=1` also sweeps the battery
-  level).
-- `npm run dev`, then open `http://localhost:1420/flyout.html?scenario=<name>&more=1` in a browser to review the UI.
-  Scenarios: `connected`, `anc`, `customeq`, `disconnected`, `connecting`, `lowbattery`, `charging`, `finding`,
-  `longeq`, `minimal`, `noanc`.
-- `BUDS_TASKBAR_THEME=light|dark` forces the tray icon colour.
-
-Regenerating assets: the app icon with `cargo run -p icongen -- app-icon.png` then `npx tauri icon app-icon.png`; the
-tray icon contact sheet with `cargo run -p buds-art --example contact_sheet -- docs/screenshots/tray-icons.png`.
+[docs/RELEASING.md](docs/RELEASING.md). The crate layout, working without earbuds and regenerating assets are covered
+in [CONTRIBUTING.md](CONTRIBUTING.md#project-layout-and-tools).
 
 ## Contributing
 
 Bug reports, hardware reports (especially from **Linux** and **macOS**, and from earbud models other than the Buds 4)
-and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md). Security issues: [SECURITY.md](SECURITY.md).
 
 ## Credits
 

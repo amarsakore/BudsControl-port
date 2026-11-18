@@ -8,7 +8,32 @@ permissions:
   contents: write
 
 jobs:
+  notes:
+    name: Release notes
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract this version from the changelog
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v v="$version" '
+            /^## \[/ { if (found) exit; found = index($0, "[" v "]") > 0; next }
+            found { print }
+          ' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then
+            echo "No section for $version in CHANGELOG.md" >&2
+            exit 1
+          fi
+          base="https://github.com/${GITHUB_REPOSITORY}"
+          sed -i -E "s#\]\(((docs/|README\.md)[^)]*)\)#](${base}/blob/${GITHUB_REF_NAME}/\1)#g" notes.md
+      - name: Create the release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Buds Control ${{ github.ref_name }}
+          body_path: notes.md
+
   windows:
+    needs: notes
     name: Windows installer + portable zip
     runs-on: windows-latest
     steps:
@@ -25,12 +50,12 @@ jobs:
       - name: Publish to the release
         uses: softprops/action-gh-release@v2
         with:
-          generate_release_notes: true
           files: |
             release/*-setup.exe
             release/*-portable.zip
 
   linux:
+    needs: notes
     name: Linux AppImage + deb
     runs-on: ubuntu-22.04
     steps:
@@ -51,12 +76,12 @@ jobs:
       - name: Publish to the release
         uses: softprops/action-gh-release@v2
         with:
-          generate_release_notes: true
           files: |
             release/*.AppImage
             release/*.deb
 
   macos:
+    needs: notes
     name: macOS dmg (${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     strategy:
@@ -80,5 +105,4 @@ jobs:
       - name: Publish to the release
         uses: softprops/action-gh-release@v2
         with:
-          generate_release_notes: true
           files: release/*.dmg
